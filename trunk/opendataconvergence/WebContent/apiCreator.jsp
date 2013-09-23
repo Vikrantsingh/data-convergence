@@ -7,10 +7,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <script src="js/loading.js"></script>
+		<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js'></script>
+		<script src='jquery.autosize.js'></script>
+		<script>
+			$(function(){
+				$('.normal').autosize();
+				$('.animated').autosize({append: "\n"});
+			});
+		</script>
 </head>
 <body >
 <center>
-<form name="form1" method="post" action="">
+ <form name="form1" method="post" action="">
   <table width="800" border="0">
     <tr>
       <td width="200">&nbsp;</td>
@@ -23,8 +31,7 @@
         <select name="department" id="department" onchange="loadDataset(this.value)">
         <option value="">Select Department</option>
         <%
-        Connection con = DB_Config.registerDB("datarepo", 3306, "localhost",
-				"root", "root");
+        Connection con = DB_Config.registerDB();
 
 		String sql = "select department from location_index";
 
@@ -106,9 +113,14 @@
       <td bgcolor="#FFCC66">&nbsp;</td>
     </tr>
     <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
+      <td bgcolor="#FFCC66">Specify Limit: </td>
+      <td bgcolor="#FFCC66">Minimum:</td>
+      <td bgcolor="#FFCC66"><input type="text" name="minimum"/> </td>
+    </tr>
+     <tr>
+      <td bgcolor="#FFCC66">&nbsp;</td>
+      <td bgcolor="#FFCC66">Maximum:</td>
+      <td bgcolor="#FFCC66"><input type="text" name="maximum"/> </td>
     </tr>
     <tr>
       <td>&nbsp;</td>
@@ -123,12 +135,12 @@
       <td>&nbsp;</td>
     </tr>
   </table>
-  <h4>Query Statement is:</h4><textarea id="query" name="query"  rows="2" cols="100"  readonly ></textarea>
-  <br/>
-  <br/>
+  
+  
+  <h4>Query Statement is:</h4><textarea id="query" class="normal" name="query"  rows="2" cols="100"  readonly ></textarea>
   <br/>
   <div id="query_generate">
-  <h4>Sample Output Will be :</h4><textarea id="output" name="output" rows="2" cols="100" readonly></textarea>
+ <h4>Sample Output</h4><textarea id="output" class="animated" name="output" rows="6" cols="100" readonly ></textarea>
   </div>
 </form>
 </center>
