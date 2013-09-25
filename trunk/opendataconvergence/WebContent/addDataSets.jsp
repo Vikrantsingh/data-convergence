@@ -38,7 +38,7 @@
             <td bgcolor="#FFCC00">State</td>
             <td bgcolor="#FFCC00"><input type="radio" name="state" value="single">
               single
-              <input type="radio" name="state" value="multiple">
+              <input type="radio" name="country" value="multiple">
               multiple</td>
           </tr>
           <tr>
@@ -49,7 +49,7 @@
             <td bgcolor="#FFCC00">District</td>
             <td bgcolor="#FFCC00"><input type="radio" name="district" value="single">
               single
-              <input type="radio" name="district" value="multiple">
+              <input type="radio" name="country" value="multiple">
               multiple</td>
           </tr>
           <tr>

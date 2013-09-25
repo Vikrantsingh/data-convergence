@@ -6,6 +6,27 @@ public class LocationIndexModel {
 	private String district;
 	private String department;
 	private String dataset_name;
+	private String time_stamp;
+	private int location_index_id;
+	
+	
+	
+	
+	public int getLocation_index_id() {
+		return location_index_id;
+	}
+
+	public void setLocation_index_id(int location_index_id) {
+		this.location_index_id = location_index_id;
+	}
+
+	public String getTime_stamp() {
+		return time_stamp;
+	}
+
+	public void setTime_stamp(String time_stamp) {
+		this.time_stamp = time_stamp;
+	}
 
 	public String getCountry() {
 		return country;

@@ -12,6 +12,7 @@
 <p><a href="addDataSets.jsp">Add new Datasets</a></p>
 <p><a href="apiCreator.jsp">API Creator</a> </p>
 <p><a href="api.jsp?department=address&country=india&start=0&limit=10">Sample API </a></p>
+<p><a href="api2.jsp?loc_index_id=12,13&start=0&limit=10">Sample API2.0 </a></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <hr>

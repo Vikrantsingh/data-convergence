@@ -17,7 +17,7 @@ public class DB_Config {
 	
 	
 	public static Connection registerDB(){
-		return  DB_Config.registerDB("datarepo", 3306,"localhost", "root", "root");
+		return  DB_Config.registerDB("datarepo", 3306,"localhost", "root", "mysql");
 	}
 	
 	public static Connection registerDB(String Db_name,int port_no,String Host_name,String User_name ,String password) {
