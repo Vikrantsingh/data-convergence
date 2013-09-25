@@ -12,15 +12,27 @@
 <%
 	String dept=request.getParameter("department");
 	System.out.println("Selected department is:"+dept);
-	ArrayList<String> datasetName=LocationIndexAction.getDatasetName(dept);
+	String[]department_name=dept.split(",");
+	ArrayList<String> dataset_name=new ArrayList<String>();
+	for(int i=0;i<department_name.length;i++){
+	ArrayList<String> datasetName=LocationIndexAction.getDatasetName(department_name[i]);
+	for(String x : datasetName){
+		dataset_name.add(x);
+	}
+	}
+	System.out.println("datasetname:"+dataset_name);
 	
 	%>
-<select onchange="loadField(this.value)" name="dataset" id="dataset">
-<option value="">Select DataSets</option>
-<% for(String x : datasetName){ 
+<select onchange="storeValuesDatasets()" name="dataset" id="dataset" multiple>
+<option value="">Select the datasets</option>
+<% for(String x : dataset_name){ 
+	String[] str_array = x.split(",");
+	int id = Integer.parseInt(str_array[0]); 
+	String stringb = str_array[2]+"."+str_array[1];
 	%>
-	<option value=<%=x %>><%=x %></option>
+	<option value=<%=id %>><%=stringb %></option>
 	<%} %>
 </select>
+<input type="button" id="dataset_selected" name="dataset_selected" value="go" onclick="loadField()"/>
 </body>
 </html>

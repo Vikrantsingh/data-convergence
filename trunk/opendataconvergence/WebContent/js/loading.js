@@ -1,25 +1,206 @@
-var xmlhttp;
+var xmlhttp,xmlhttp1;
+var selectedDatasets = new Array();
+var selectedField;
+var selectedDepartment;
+var selectedCountries;
+var selectedStates;
+var selectedDistrict;
+var combinationOfAll;
+/******************* dataset retrival begins
+ * 
+ * @param dept
+ * @returns {Number}
+ */
 function loadDataset(dept)
 {	
+	
+	if(dept==""){
+		alert("Please select department you want to query on!!..");
+		return 0;
+}
+	var selectedDept = new Array();
+	 var selObj = document.getElementById('department');
+	  var i;
+	  var count = 0;
+	  for (i=0; i<selObj.options.length; i++) {
+	    if (selObj.options[i].selected) {
+	      selectedDept[count] = selObj.options[i].value;
+	      count++;
+	    }
+	  }
+	  selectedDepartment = selectedDept;
 xmlhttp=GetXmlHttpObject();
-if (xmlhttp==null)
+xmlhttp1=GetXmlHttpObject();
+if (xmlhttp==null || xmlhttp1 == null)
   {
   alert ("Your browser does not support XMLHTTP!");
   return;
   }
 else{
 var url="db_getDataSetName.jsp";
-url=url+"?department="+dept;
+var url1="db_getCountry.jsp";
+url=url+"?department="+selectedDept;
+url1=url1+"?department="+selectedDept;
 //alert(url);
+// for dataset change request
 xmlhttp.onreadystatechange=stateChangedDataSet;
 xmlhttp.open("GET",url,true);
 xmlhttp.send(null);
+// for country change request
+xmlhttp1.onreadystatechange=stateChangedCountry;
+xmlhttp1.open("GET",url1,true);
+xmlhttp1.send(null);
 }
 }
+// for dataset change select when department changes
+function stateChangedDataSet(){
+if (xmlhttp.readyState==4){
+  document.getElementById("dataset_name").innerHTML=xmlhttp.responseText;
+}
+else{
+  document.getElementById("dataset_name").innerHTML="processing<img src='Images/ajax-loade.gif' />";
+	}
+}
+
+
+// for changing the country select when ever department changes
+function stateChangedCountry(){
+if (xmlhttp1.readyState==4)  {
+  document.getElementById("country").innerHTML=xmlhttp1.responseText;
+	}
+else{
+  document.getElementById("country").innerHTML="processing<img src='Images/ajax-loade.gif' />";
+	}
+}
+
+
+  /****************** Dataset Retrival ends **************************/
+
+/********************* State retrival starts here ***************************/ 
+
+function loadState(country)
+{	
+	if(country==""){
+		alert("Please select country you want to query on!!..");
+		return 0;
+}
+	var selectedCountry = new Array();
+	 var selObj = document.getElementById('countries');
+	  var i;
+	  var count = 0;
+	  for (i=0; i<selObj.options.length; i++) {
+	    if (selObj.options[i].selected) {
+	      selectedCountry[count] = selObj.options[i].value;
+	      count++;
+	    }
+	  }
+	  selectedCountries = selectedCountry;
+	  alert(selectedCountry);
+	  xmlhttp=GetXmlHttpObject();
+	 // xmlhttp1=GetXmlHttpObject();
+	  if (xmlhttp==null )
+	    {
+	    alert ("Your browser does not support XMLHTTP!");
+	    return;
+	    }
+	  else{
+	  var url="db_getState.jsp";
+	  url=url+"?country="+selectedCountry;
+	  //url1=url1+"?department="+selectedDept;
+	 
+	  // for state change request
+	  xmlhttp.onreadystatechange=stateChangedState;
+	  xmlhttp.open("GET",url,true);
+	  xmlhttp.send(null);
+	 }
+}
+function stateChangedState(){
+	if (xmlhttp.readyState==4)  {
+	  document.getElementById("state").innerHTML=xmlhttp.responseText;
+		}
+	else{
+	  document.getElementById("state").innerHTML="processing<img src='Images/ajax-loade.gif' />";
+		}
+	}
+
+/************* loading states based on country is done ****************/
+
+/********************* District retrival starts here ***************************/ 
+
+function loadDistrict(state)
+{	
+	if(state==""){
+		alert("Please select country you want to query on!!..");
+		return 0;
+}
+	var selectedState = new Array();
+	 var selObj = document.getElementById('states');
+	  var i;
+	  var count = 0;
+	  for (i=0; i<selObj.options.length; i++) {
+	    if (selObj.options[i].selected) {
+	      selectedState[count] = selObj.options[i].value;
+	      count++;
+	    }
+	  }
+	  selectedStates = selectedState;
+	  
+	  xmlhttp=GetXmlHttpObject();
+	 // xmlhttp1=GetXmlHttpObject();
+	  if (xmlhttp==null )
+	    {
+	    alert ("Your browser does not support XMLHTTP!");
+	    return;
+	    }
+	  else{
+	  var url="db_getDistrict.jsp";
+	  url=url+"?state="+selectedState;
+	  //url1=url1+"?department="+selectedDept;
+	  
+	  // for state change request
+	  xmlhttp.onreadystatechange=stateChangedDistrict;
+	  xmlhttp.open("GET",url,true);
+	  xmlhttp.send(null);
+	 }
+}
+function stateChangedDistrict(){
+	if (xmlhttp.readyState==4)  {
+	  document.getElementById("district").innerHTML=xmlhttp.responseText;
+		}
+	else{
+	  document.getElementById("district").innerHTML="processing<img src='Images/ajax-loade.gif' />";
+		}
+	}
+
+/************* loading districts based on states is done ****************/
+
+
+/*************************** Stroing the country, state and district values and forming a string *****************/
+function storeValue(){
+	  var selectedDistricts=new Array();
+	  var selObj = document.getElementById('districts');
+	  var i;
+	  var count = 0;
+	  for (i=0; i<selObj.options.length; i++) {
+	    if (selObj.options[i].selected) {
+	      selectedDistricts[count] = selObj.options[i].value;
+	      count++;
+	    }
+	  }
+	  selectedDistrict = selectedDistricts;
+	}
+
+/*************************** End of store value *********************************/
+
+function combination(){
+
+	combinationOfAll="?country="+selectedCountries+"&state="+selectedStates+"&district="+selectedDistrict;
+	alert(combinationOfAll);
+}
 
 
 
-function loadField(dataset_name)
+function loadField()
 {
 xmlhttp=GetXmlHttpObject();
 if (xmlhttp==null)
@@ -28,14 +209,57 @@ if (xmlhttp==null)
   return;
   }
 else{
+var data=selectedDatasets;
+
 var url="db_getField.jsp";
-url=url+"?dataset="+dataset_name;
+url=url+"?dataset_id="+data;
 //alert(url);
 xmlhttp.onreadystatechange=stateChangedFields;
 xmlhttp.open("GET",url,true);
 xmlhttp.send(null);
 }
 }
+
+
+
+
+function storeValuesDatasets(){
+	
+	  
+	  var selObj = document.getElementById('dataset');
+	  var i;
+	  var count = 0;
+	  for (i=0; i<selObj.options.length; i++) {
+	    if (selObj.options[i].selected) {
+	      selectedDatasets[count] = selObj.options[i].value;
+	      count++;
+	    }
+	  }
+	
+		
+}
+
+	  function loadFilter(){
+	  xmlhttp=GetXmlHttpObject();
+	  if (xmlhttp==null)
+	    {
+	    alert ("Your browser does not support XMLHTTP!");
+	    return;
+	    }
+	  else{
+		  var data=selectedFields;
+	  var url="db_getFilter.jsp";
+	  url=url+"?dataset_fields="+data;
+	  //alert(url);
+	  xmlhttp.onreadystatechange=stateChangedFilters;
+	  xmlhttp.open("GET",url,true);
+	  xmlhttp.send(null);
+	  }
+	  
+}
+
+
+
 function GetXmlHttpObject()
 {
 if (window.XMLHttpRequest)
@@ -50,17 +274,7 @@ if (window.ActiveXObject)
   }
 return null;
 }
-function stateChangedDataSet()
-{
-if (xmlhttp.readyState==4)
-  {
-  document.getElementById("dataset_name").innerHTML=xmlhttp.responseText;
-}
-else
-{
-  document.getElementById("dataset_name").innerHTML="processing<img src='Images/ajax-loade.gif' />";
-}
-}
+
 function stateChangedFields()
 {
 if (xmlhttp.readyState==4)
@@ -74,6 +288,18 @@ else
 }
 
 
+function stateChangedFilters()
+{
+if (xmlhttp.readyState==4)
+  {
+  document.getElementById("filter1").innerHTML=xmlhttp.responseText;
+}
+else
+{
+  document.getElementById("filter1").innerHTML="processing<img src='Images/ajax-loade.gif' />";
+}
+}
+
 function show(){
 	//alert("hi");
 	xmlhttp=GetXmlHttpObject();
@@ -85,14 +311,29 @@ function show(){
 	else{
 		var i=document.getElementById("department").selectedIndex;
 		var dept=document.getElementById("department").options[i].value;
+		if(dept==""){
+			alert("Please select a department to query on!!");
+			return 0;
+		}
 		i=document.getElementById("dataset").selectedIndex;
 		var dataset=document.getElementById("dataset").options[i].value;
+		if(dataset==""){
+			alert("Please select a dataset to query on!!");
+			return 0;
+		}
 		i=document.getElementById("dataset_fields").selectedIndex;
 		var field=document.getElementById("dataset_fields").options[i].value;
+		if(field==""){
+			alert("Please select a department to query on!!");
+			return 0;
+		}
+		var start=document.getElementById("start").value;
+		var limit=document.getElementById("limit").value;
 		var text=document.getElementById("query");
 		var url="http://localhost:8095/opendataconvergence/api.jsp";
 		document.getElementById("department").value=dept;
-		url=url+"?country=India&department="+dept+"&dataset="+dataset+"&fields="+field;
+		url=url+combinationOfAll+"&dataset="+selectedDatasets+"&fields="+selectedField+"&start="+start+"&limit="+limit;
+		alert(url);
 		text.value=url;
 		var url1="getApi.jsp";
 		url1=url1+"?dataset="+dataset+"&department="+dept;
@@ -113,4 +354,19 @@ else
 {
   document.getElementById("query_generate").innerHTML="processing<img src='Images/ajax-loade.gif' />";
 }
+}
+
+function storeFields(){
+var selectedFields = new Array();
+var selObj = document.getElementById('dataset_fields');
+ var i;
+ var count = 0;
+ for (i=0; i<selObj.options.length; i++) {
+   if (selObj.options[i].selected) {
+     selectedFields[count] = selObj.options[i].value;
+     count++;
+   }
+ }
+ selectedField=selectedFields;
+
 }
