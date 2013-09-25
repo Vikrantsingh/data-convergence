@@ -1,33 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-<%@page import="rdbms.*,java.util.*" %>
+    <%@page import="rdbms.*,java.util.*" %>
+
 <%
-	String dataset=request.getParameter("dataset");
-	ArrayList<Integer> id=LocationIndexAction.getDataSetKey(dataset);
+	String dataset=request.getParameter("dataset_id");
+	String[] dataset_ids=dataset.split(",");
 	ArrayList<String> str=null;
-	Set<String> fields=new HashSet<String>();
-	for(int i : id){
-	//System.out.println(id.get(i));
-	str=LocationIndexAction.getSchema(i);
-	for(String j : str){
-		System.out.println(j);
-		fields.add(j);
+	ArrayList<String> datasetNameId=new ArrayList<String>();
+	System.out.println(dataset_ids.length);
+	for(int id=0;id< dataset_ids.length;id++){
+		str=LocationIndexAction.getSchemaId(Integer.parseInt(dataset_ids[id]));
+		String dataset_name=LocationIndexAction.getDatasetNameId(Integer.parseInt(dataset_ids[id]));
+		System.out.println("inside"+dataset_ids[id]);
+	for(int j=0; j<str.size();j++){
+		String[] splitting=str.get(j).split(",");
+		String data=splitting[0]+","+dataset_name+"."+splitting[1];
+		datasetNameId.add(data);
+		}
 	}
-}
-System.out.println(fields);
+System.out.println(datasetNameId);
 	%>
-<select id="dataset_fields" name="dataset_fields" >
+	
+<select onchange="storeFields()" name="dataset_fields" id="dataset_fields" multiple="multiple" >
 <option value="">Select Fields Required</option>
-<% for(String x : fields){ %>
-	<option value=<%=x %>><%=x %></option>
+<% for(String x : datasetNameId){ 
+		String[] array_str=x.split(",");
+		int i=Integer.parseInt(array_str[0]);
+		String name=array_str[1];
+		%>
+	<option value=<%=i %>><%=name %></option>
 	<%} %>
 </select>
-</body>
-</html>
