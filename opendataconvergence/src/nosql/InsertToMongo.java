@@ -86,7 +86,7 @@ public class InsertToMongo {
 				
 				BasicDBObject document = new BasicDBObject();
 				
-				document.put("deparment", departmentName);
+				document.put("department", departmentName);
 				document.put("dataset_name", DatasetName);
 				document.put("loc_index_id",id);
 				
@@ -102,7 +102,7 @@ public class InsertToMongo {
 				
 				//dataset.put((i+1)+"", documentDetail);
 				//document.put("dataset",values.get(i));
-				document.put("dataset",documentDetail);
+				document.put("data",documentDetail);
 				collection.insert(document);
 				
 			}

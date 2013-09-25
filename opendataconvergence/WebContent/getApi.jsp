@@ -60,6 +60,7 @@
 	for(int i=0;i<dataset_id.length;i++){
 	//System.out.println(id.get(i));
 	str=LocationIndexAction.getSchemaId(Integer.parseInt(dataset_id[i]));
+	
 	for(String j : str){
 		//System.out.println(j);
 		fields_name.add(j);
