@@ -24,36 +24,15 @@
       <td bgcolor="#FFFF99">Granularity</td>
       <td bgcolor="#FFFF99"><table>
           <tr>
-            <td width="140" bgcolor="#FFCC00">Country</td>
-            <td width="159" bgcolor="#FFCC00"><input type="radio" name="country" value="single">
-              single
-              <input type="radio" name="country" value="multiple">
-              multiple</td>
-          </tr>
-          <tr>
-            <td bgcolor="#FFCC00">Country/column name</td>
+            <td bgcolor="#FFCC00">Country</td>
             <td bgcolor="#FFCC00"><input type="text" name="country_col_name"></td>
           </tr>
           <tr>
             <td bgcolor="#FFCC00">State</td>
-            <td bgcolor="#FFCC00"><input type="radio" name="state" value="single">
-              single
-              <input type="radio" name="country" value="multiple">
-              multiple</td>
-          </tr>
-          <tr>
-            <td bgcolor="#FFCC00">State/column name</td>
             <td bgcolor="#FFCC00"><input type="text" name="state_col_name"></td>
           </tr>
           <tr>
             <td bgcolor="#FFCC00">District</td>
-            <td bgcolor="#FFCC00"><input type="radio" name="district" value="single">
-              single
-              <input type="radio" name="country" value="multiple">
-              multiple</td>
-          </tr>
-          <tr>
-            <td bgcolor="#FFCC00">District/column name</td>
             <td bgcolor="#FFCC00"><input type="text" name="district_col_name"></td>
           </tr>
         </table></td>

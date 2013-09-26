@@ -89,6 +89,9 @@ public class ReadCSV {
 				if (i == 0) {
 					row = line.split(getColSpilter());
 					for (String s : row) {
+						s=s.trim();
+						s=s.replace(" ", "_");
+						s=s.replace("\"", "");
 						keys.add(s);
 					}
 					i++;
