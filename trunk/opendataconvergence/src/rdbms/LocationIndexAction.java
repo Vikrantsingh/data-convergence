@@ -5,8 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import com.mysql.jdbc.Statement;
+
 
 public class LocationIndexAction {
 
@@ -185,41 +189,6 @@ public class LocationIndexAction {
 
 	}
 
-	public static String getDatasetNameId(int dataset_id) {
-
-		String datasetNames = null;
-		Connection con = null;
-		String sql = null;
-		PreparedStatement pst = null;
-		ResultSet res = null;
-		try {
-			con = DB_Config.registerDB();
-
-			sql = "select dataset_name from location_index where location_index_id = "
-					+ dataset_id;
-
-			pst = con.prepareStatement(sql);
-
-			res = pst.executeQuery();
-			while (res.next()) {
-				System.out.println(res.getString("dataset_name"));
-				datasetNames = res.getString("dataset_name");
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			DB_Config.close(con);
-			DB_Config.close(pst);
-			DB_Config.close(res);
-
-		}
-
-		return datasetNames;
-
-	}
-
 	// public static ArrayList<Integer> getDataSetKey(int dataset_id){
 	// ArrayList<Integer> datasetId =new ArrayList<Integer>();
 	// Connection con=null;
@@ -345,10 +314,11 @@ public class LocationIndexAction {
 
 	// for getting the state name for the respective country
 	/****************** Starting of getState() *********************/
-	public static String getState(String countryName) {
+	@SuppressWarnings("null")
+	public static ArrayList<String> getState(String countryName) {
 		String[] countrySplit = countryName.split(":");
 
-		String stateName = null;
+		ArrayList<String> stateName = new ArrayList<String>();
 		Connection con = null;
 		String sql = null;
 		PreparedStatement pst = null;
@@ -359,13 +329,13 @@ public class LocationIndexAction {
 			sql = "select state from location_index where country = '"
 					+ countrySplit[0] + "' and department='" + countrySplit[1]
 					+ "'";
-
+			System.out.println("DB coimmand :" + sql);
 			pst = con.prepareStatement(sql);
 
 			res = pst.executeQuery();
 			while (res.next()) {
-				System.out.println(res.getString("state"));
-				stateName = res.getString("state") + ":" + countrySplit[1];
+				System.out.println("State:" + res.getString("state"));
+				stateName.add(res.getString("state") + ":" + countrySplit[1]);
 			}
 
 		} catch (SQLException e) {
@@ -375,7 +345,7 @@ public class LocationIndexAction {
 			DB_Config.close(con);
 			DB_Config.close(pst);
 			DB_Config.close(res);
-
+			System.out.println("inside getState in indexaction:" + stateName);
 		}
 
 		return stateName;
@@ -386,10 +356,9 @@ public class LocationIndexAction {
 
 	// for getting the district name for the respective country
 	/****************** Starting of getDistrict() *********************/
-	public static String getDistrict(String countryName) {
-		String[] stateSplit = countryName.split(":");
-		System.out.println(stateSplit[0] + "  " + stateSplit[1]);
-
+	public static String getDistrict(String countryName, String statename) {
+		String[] countrySplit = countryName.split(":");
+		String[] stateSplit=statename.split(":");
 		String districtName = null;
 		Connection con = null;
 		String sql = null;
@@ -400,18 +369,100 @@ public class LocationIndexAction {
 
 			sql = "select district from location_index where state = '"
 					+ stateSplit[0] + "' and department='" + stateSplit[1]
+					+ "' and country='"+countrySplit[0]+"'";
+			System.out.println("getdistrict sql:"+sql);
+			pst = con.prepareStatement(sql);
+
+			res = pst.executeQuery();
+			while (res.next()) {
+					String s = res.getString("district");
+					System.out.println("output:"+s);
+					districtName = s + ":" + stateSplit[1];
+				}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DB_Config.close(con);
+			DB_Config.close(pst);
+			DB_Config.close(res);
+			System.out.println("district names obtained are:"+districtName);
+		}
+
+		return districtName;
+
+	}
+
+	/****************** End of getDistrict() **********************/
+
+	/**************** datasetName filter based on country, state and district ****************/
+	public static ArrayList<String> getDatasetNameFilter(String country) {
+		String[] country_name = country.split(":");
+		System.out.println("Inside function " + country_name[0] + "  "
+				+ country_name[1]);
+		ArrayList<String> datasetNames = new ArrayList<String>();
+		Connection con = null;
+		String sql = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		try {
+			con = DB_Config.registerDB();
+
+			sql = "select location_index_id,dataset_name,date_time from location_index where department = '"
+					+ country_name[1]
+					+ "' and country='"
+					+ country_name[0]
 					+ "'";
+			System.out.println("In location" + sql);
+			pst = con.prepareStatement(sql);
+
+			res = pst.executeQuery();
+
+			while (res.next()) {
+				String name = res.getString("dataset_name");
+				int id = res.getInt("location_index_id");
+				String date = res.getString("date_time");
+				String dataset_nameid = id + "," + name + "," + date;
+				datasetNames.add(dataset_nameid);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DB_Config.close(con);
+			DB_Config.close(pst);
+			DB_Config.close(res);
+			System.out.println(datasetNames);
+
+		}
+
+		return datasetNames;
+
+	}
+
+	/******************* dataset name filtering done *******************/
+
+	public static String getDatasetNameId(int dataset_id) {
+
+		String datasetNames = null;
+		Connection con = null;
+		String sql = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		try {
+			con = DB_Config.registerDB();
+
+			sql = "select dataset_name from location_index where location_index_id = "
+					+ dataset_id;
 
 			pst = con.prepareStatement(sql);
 
 			res = pst.executeQuery();
 			while (res.next()) {
-				System.out.println(res.getString("district"));
-				if (res.getString("district") == null)
-					districtName = "";
-				else
-					districtName = res.getString("district") + ":"
-							+ stateSplit[1];
+				System.out.println(res.getString("dataset_name"));
+				datasetNames = res.getString("dataset_name");
 			}
 
 		} catch (SQLException e) {
@@ -424,13 +475,113 @@ public class LocationIndexAction {
 
 		}
 
-		return districtName;
+		return datasetNames;
 
 	}
 
-	/****************** End of getDistrict() **********************/
+	// for getting the state name for the respective country
+	/****************** Starting of getState() *********************/
+	@SuppressWarnings("null")
+	public static ArrayList<String> getDatasetNameState(String countryName,
+			String state_Name) {
+		String[] countrySplit = countryName.split(":");
+		String[] stateSplit = state_Name.split(":");
 
-	
+		ArrayList<String> datasetNames = new ArrayList<String>();
+		Connection con = null;
+		String sql = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		try {
+			con = DB_Config.registerDB();
+
+			sql = "select location_index_id,dataset_name,date_time from location_index where country = '"
+					+ countrySplit[0]
+					+ "' and department='"
+					+ countrySplit[1]
+					+ "'"
+					+ " and state='"
+					+ stateSplit[0]
+					+ "' order by date_time desc";
+			System.out.println("DB coimmand :" + sql);
+			pst = con.prepareStatement(sql);
+
+			res = pst.executeQuery();
+			while (res.next()) {
+				String name = res.getString("dataset_name");
+				int id = res.getInt("location_index_id");
+				String date = res.getString("date_time");
+				String[] dateTime = date.split(" ");
+				String dataset_nameid = id + "," + name + "," + dateTime[0];
+				datasetNames.add(dataset_nameid);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DB_Config.close(con);
+			DB_Config.close(pst);
+			DB_Config.close(res);
+			System.out
+					.println("inside getState in indexaction:" + datasetNames);
+		}
+
+		return datasetNames;
+
+	}
+
+	/****************** Starting of getState() *********************/
+	@SuppressWarnings("null")
+	public static ArrayList<String> getDatasetNameDistrict(String countryName,
+			String state_Name, String districtName) {
+		String[] countrySplit = countryName.split(":");
+		String[] stateSplit = state_Name.split(":");
+		String[] districtSplit = districtName.split(":");
+		ArrayList<String> datasetNames = new ArrayList<String>();
+		Connection con = null;
+		String sql = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		try {
+			con = DB_Config.registerDB();
+
+			sql = "select location_index_id,dataset_name,date_time from location_index where country = '"
+					+ countrySplit[0]
+					+ "' and department='"
+					+ countrySplit[1]
+					+ "'"
+					+ " and state='"
+					+ stateSplit[0]
+					+ "' and district='"
+					+ districtSplit[0] + "' order by date_time desc";
+			System.out.println("DB coimmand :" + sql);
+			pst = con.prepareStatement(sql);
+
+			res = pst.executeQuery();
+			while (res.next()) {
+				String name = res.getString("dataset_name");
+				int id = res.getInt("location_index_id");
+				String date = res.getString("date_time");
+				String[] dateTime = date.split(" ");
+				String dataset_nameid = id + "," + name + "," + dateTime[0];
+				datasetNames.add(dataset_nameid);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DB_Config.close(con);
+			DB_Config.close(pst);
+			DB_Config.close(res);
+			System.out
+					.println("inside getState in indexaction:" + datasetNames);
+		}
+
+		return datasetNames;
+
+	}
 	
 	public LocationIndexModel getLocationIndexData(int loc_index_id) {
 		ArrayList<Integer> datasetId = new ArrayList<Integer>();

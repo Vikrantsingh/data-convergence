@@ -14,5 +14,7 @@
 	<classpathentry kind="lib" path="E:/sw/java/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="E:/sw/java/servlet-api-2.5.jar"/>
 	<classpathentry kind="lib" path="E:/sw/java/google-gson-2.2.4-release/google-gson-2.2.4/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="E:/sw/java/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="E:/sw/java/commons-lang3-3.1-bin/commons-lang3-3.1/commons-lang3-3.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

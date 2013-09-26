@@ -21,7 +21,7 @@
 System.out.println(datasetNameId);
 	%>
 	
-<select onchange="storeFields()" name="dataset_fields" id="dataset_fields" multiple="multiple" >
+<select onchange="storeFields()" name="dataset_fields" id="dataset_fields" multiple="multiple" required>
 <option value="">Select Fields Required</option>
 <% for(String x : datasetNameId){ 
 		String[] array_str=x.split(",");
